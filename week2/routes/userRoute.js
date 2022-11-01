@@ -1,5 +1,5 @@
 'use strict';
-// personRoute
+// user route
 
 const express = require('express');
 const {user_list_get, user_get} = require('../controllers/userController');

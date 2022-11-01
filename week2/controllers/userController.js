@@ -1,6 +1,6 @@
 'use strict';
 
-// Person controller
+// user controller
 
 const {users, getUser} = require('../models/userModel');
 
