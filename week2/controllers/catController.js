@@ -1,7 +1,6 @@
 'use strict';
 
-// Controller
-'use strict';
+// Cat controller
 const {cats, getCat} = require('../models/catModel');
 
 const cat_list_get = (req, res) => {
@@ -10,7 +9,6 @@ const cat_list_get = (req, res) => {
 
 const cat_get = (req, res) => {
   const cat = getCat(req.params.id);
-  console.log('cat', cat);
   res.json(cat);
 };
 
