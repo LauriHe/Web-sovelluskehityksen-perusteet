@@ -1,20 +1,40 @@
 "use strict";
 
 // Cat controller
-const { getCat, getAllCats } = require("../models/catModel");
+const { getCat, getAllCats, addCat } = require("../models/catModel");
 
 const cat_list_get = async (req, res) => {
   res.json(await getAllCats());
 };
 
-const cat_get = (req, res) => {
-  const cat = getCat(req.params.id);
-  res.json(cat);
+const cat_get = async (req, res) => {
+  const cat = await getCat(req.params.id);
+  if (cat.length > 0){
+    res.json(cat.pop());
+  } else{
+    res.send('Could not find cat with id ' + req.params.id);
+  };
 };
 
-const cat_post = (req, res) => {
+const cat_post = async (req, res) => {
   console.log("cat_post", req.body, req.file);
-  res.send("Cat post done.");
+  const data = [
+    req.body.name,
+    req.body.birthdate,
+    req.body.weight,
+    req.body.owner,
+    req.file.filename,
+  ];
+  const result = await addCat(data);
+  if(result.affectedRows > 0){
+    res.json({
+      message: 'cat added',
+      cat_id: result.insertId,
+    });
+  }else{
+    res.send("error");
+  };
+  console.log('addCat', result);
 };
 
 module.exports = {
