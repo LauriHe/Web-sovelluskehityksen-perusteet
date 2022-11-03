@@ -26,6 +26,7 @@ const cat_post = async (req, res) => {
     req.file.filename,
   ];
   const result = await addCat(data);
+  console.log('addCat', result, data);
   if(result.affectedRows > 0){
     res.json({
       message: 'cat added',
@@ -34,7 +35,7 @@ const cat_post = async (req, res) => {
   }else{
     res.send("error");
   };
-  console.log('addCat', result);
+
 };
 
 module.exports = {
