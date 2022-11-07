@@ -44,9 +44,9 @@ const cat_update = async (req, res) => {
     req.body.birthdate,
     req.body.weight,
     req.body.owner,
+    req.body.id,
   ];
-  const id = req.body.id;
-  const result = await updateCat(data, id);
+  const result = await updateCat(data);
   console.log('updateCat', result, data);
   if(result.affectedRows > 0){
     res.json({
