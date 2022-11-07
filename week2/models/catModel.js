@@ -40,8 +40,29 @@ const addCat = async (data) => {
   }
 };
 
+const updateCat = async (data, catId) => {
+  try {
+    const [rows] = await promisePool.execute(`UPDATE wop_cat SET (name, birthdate, weight, owner) VALUES (?, ?, ?, ?) WHERE cat_id = ?;`, data, [catId]);
+    return rows;
+  } catch (e) {
+    console.error("error", e.message);
+  }
+};
+
+const deleteCat = async (catId) => {
+  try {
+    const [rows] = await promisePool.execute(`DELETE FROM wop_cat WHERE cat_id = ?;`, [catId]);
+    return rows;
+  } catch (e) {
+    console.error("error", e.message);
+  }
+};
+
+
 module.exports = {
   getAllCats,
   getCat,
   addCat,
+  updateCat,
+  deleteCat,
 };

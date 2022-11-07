@@ -1,7 +1,7 @@
 "use strict";
 
 // Cat controller
-const { getCat, getAllCats, addCat } = require("../models/catModel");
+const { getCat, getAllCats, addCat, updateCat, deleteCat } = require("../models/catModel");
 
 const cat_list_get = async (req, res) => {
   res.json(await getAllCats());
@@ -35,11 +35,46 @@ const cat_post = async (req, res) => {
   }else{
     res.send("error");
   };
+};
 
+const cat_update = async (req, res) => {
+  console.log("cat_update", req.body);
+  const data = [
+    req.body.name,
+    req.body.birthdate,
+    req.body.weight,
+    req.body.owner,
+  ];
+  const id = req.body.id;
+  const result = await updateCat(data, id);
+  console.log('updateCat', result, data);
+  if(result.affectedRows > 0){
+    res.json({
+      message: 'cat updated',
+      cat_id: result.insertId,
+    });
+  }else{
+    res.send("error");
+  };
+};
+
+const cat_delete = async (req, res) => {
+  const result = await deleteCat(req.params.id);
+  console.log("deleteCat", result);
+  if(result.affectedRows > 0){
+    res.json({
+      message: 'cat deleted',
+      cat_id: result.insertId,
+    });
+  }else{
+    res.send("error");
+  };
 };
 
 module.exports = {
   cat_list_get,
   cat_get,
   cat_post,
+  cat_update,
+  cat_delete,
 };
