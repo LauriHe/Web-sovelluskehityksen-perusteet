@@ -1,19 +1,25 @@
 "use strict";
 
 // Cat controller
-const { getCat, getAllCats, addCat, updateCat, deleteCat } = require("../models/catModel");
+const {
+  getCat,
+  getAllCats,
+  addCat,
+  updateCat,
+  deleteCat,
+} = require("../models/catModel");
 
-const cat_list_get = async (req, res) => {
-  res.json(await getAllCats());
+const cat_list_get = async (req, res, next) => {
+  res.json(await getAllCats(next));
 };
 
-const cat_get = async (req, res) => {
-  const cat = await getCat(req.params.id);
-  if (cat.length > 0){
+const cat_get = async (req, res, next) => {
+  const cat = await getCat(req.params.id, next);
+  if (cat.length > 0) {
     res.json(cat.pop());
-  } else{
-    res.send('Could not find cat with id ' + req.params.id);
-  };
+  } else {
+    res.send("Could not find cat with id " + req.params.id);
+  }
 };
 
 const cat_post = async (req, res) => {
@@ -26,15 +32,15 @@ const cat_post = async (req, res) => {
     req.file.filename,
   ];
   const result = await addCat(data);
-  console.log('addCat', result, data);
-  if(result.affectedRows > 0){
+  console.log("addCat", result, data);
+  if (result.affectedRows > 0) {
     res.json({
-      message: 'cat added',
+      message: "cat added",
       cat_id: result.insertId,
     });
-  }else{
+  } else {
     res.send("error");
-  };
+  }
 };
 
 const cat_update = async (req, res) => {
@@ -47,28 +53,28 @@ const cat_update = async (req, res) => {
     req.body.id,
   ];
   const result = await updateCat(data);
-  console.log('updateCat', result, data);
-  if(result.affectedRows > 0){
+  console.log("updateCat", result, data);
+  if (result.affectedRows > 0) {
     res.json({
-      message: 'cat updated',
+      message: "cat updated",
       cat_id: result.insertId,
     });
-  }else{
+  } else {
     res.send("error");
-  };
+  }
 };
 
 const cat_delete = async (req, res) => {
   const result = await deleteCat(req.params.id);
   console.log("deleteCat", result);
-  if(result.affectedRows > 0){
+  if (result.affectedRows > 0) {
     res.json({
-      message: 'cat deleted',
+      message: "cat deleted",
       cat_id: result.insertId,
     });
-  }else{
+  } else {
     res.send("error");
-  };
+  }
 };
 
 module.exports = {
