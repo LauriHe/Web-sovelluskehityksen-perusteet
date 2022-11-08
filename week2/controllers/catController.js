@@ -22,7 +22,7 @@ const cat_get = async (req, res, next) => {
   }
 };
 
-const cat_post = async (req, res) => {
+const cat_post = async (req, res, next) => {
   console.log("cat_post", req.body, req.file);
   const data = [
     req.body.name,
@@ -31,7 +31,7 @@ const cat_post = async (req, res) => {
     req.body.owner,
     req.file.filename,
   ];
-  const result = await addCat(data);
+  const result = await addCat(data, next);
   console.log("addCat", result, data);
   if (result.affectedRows > 0) {
     res.json({
@@ -43,7 +43,7 @@ const cat_post = async (req, res) => {
   }
 };
 
-const cat_update = async (req, res) => {
+const cat_update = async (req, res, next) => {
   console.log("cat_update", req.body);
   const data = [
     req.body.name,
@@ -52,7 +52,7 @@ const cat_update = async (req, res) => {
     req.body.owner,
     req.body.id,
   ];
-  const result = await updateCat(data);
+  const result = await updateCat(data, next);
   console.log("updateCat", result, data);
   if (result.affectedRows > 0) {
     res.json({
@@ -64,8 +64,8 @@ const cat_update = async (req, res) => {
   }
 };
 
-const cat_delete = async (req, res) => {
-  const result = await deleteCat(req.params.id);
+const cat_delete = async (req, res, next) => {
+  const result = await deleteCat(req.params.id, next);
   console.log("deleteCat", result);
   if (result.affectedRows > 0) {
     res.json({
