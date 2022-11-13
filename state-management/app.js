@@ -5,34 +5,17 @@ const session = require('express-session');
 const app = express();
 const port = 3000;
 
-//älä tee näin projektissa!!
-
-app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const username = 'foo';
 const password = 'bar';
 
 app.use(cookieParser());
-app.use(session({
-  secret: '1234',
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(session({ secret: 'cmnva.krugh', cookie: { maxAge: 60000 } }));
 
 app.set('views', './views');
 app.set('view engine', 'pug');
-
-app.post('/login', (req, res) => {
-  const uname = req.body.username;
-  const passwd = req.body.password;
-  if (uname === username && passwd === password) {
-    req.session.authenticated = true;
-    res.redirect('/secret');
-  } else {
-    res.redirect('/form');
-  }
-});
 
 app.get('/', (req, res) => {
   res.render('home');
@@ -43,30 +26,41 @@ app.get('/form', (req, res) => {
 });
 
 app.get('/secret', (req, res) => {
-  if(req.session.authenticated) {
+  if (req.session.logged) {
     res.render('secret');
-  }else {
+  } else {
     res.redirect('/form');
-  };
-  res.render('secret');
+  }
 });
 
-//älä tee näin projektissa!!
+app.post('/login', (req, res) => {
+  console.log(req.body);
+  if (req.body.password === password && req.body.username === username) {
+    req.session.logged = true;
+    res.redirect('/secret');
+  } else {
+    req.session.logged = false;
+    res.redirect('/form');
+  }
+});
+
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});
 
 app.get('/setCookie/:clr', (req, res) => {
-  res.cookie('color', req.params.clr, {httpOnly: true}).send('Cookie set');
+  res.cookie('color', req.params.clr).send('eväste asetettu');
 });
 
 app.get('/getCookie', (req, res) => {
-  console.log('Cookies', req.cookies);
-  res.send('Cookie read');
+  console.log(req.cookies);
+  res.send('color evästeessä lukee ' + req.cookies.color);
 });
 
 app.get('/deleteCookie', (req, res) => {
   res.clearCookie('color');
-  res.send('Cookie deleted');
+  res.send('eväste poistettu');
 });
-
-//älä tee näin projektissa!!
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
