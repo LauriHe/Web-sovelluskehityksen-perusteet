@@ -20,7 +20,7 @@ const login = (req, res, next) => {
       const token = jwt.sign(user, 'yikbvbvuy13487s');
       return res.json({ user, token });
     });
-  });
+  })(req, res, next);
 };
 
 module.exports = {
