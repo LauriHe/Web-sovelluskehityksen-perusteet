@@ -32,8 +32,22 @@ const addUser = async (data) => {
   }
 };
 
+const getUserLogin = async (params, next) => {
+  try {
+    console.log(params);
+    const [rows] = await promisePool.execute(
+        'SELECT * FROM wop_user WHERE email = ?;',
+        params);
+    return rows;
+  } catch (e) {
+    console.log('getUserLogin', e.message);
+    next(httpError('Database error', 500));
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUser,
   addUser,
+  getUserLogin,
 };
