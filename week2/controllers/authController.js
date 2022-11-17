@@ -1,5 +1,5 @@
 "use strict";
-const jwt = requre("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const { httpError } = require("../utils/errors");
 
