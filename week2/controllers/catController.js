@@ -72,10 +72,12 @@ const cat_post = async (req, res, next) => {
       next(httpError("Invalid data", 400));
       return;
     }
-    res.json({
-      message: "cat added",
-      cat_id: result.insertId,
-    });
+    if (thumbnail) {
+      res.json({
+        message: "cat added",
+        cat_id: result.insertId,
+      });
+    };
   } catch (e) {
     console.error("cat_post", e.message);
     next(httpError("Internal server error", 500));
