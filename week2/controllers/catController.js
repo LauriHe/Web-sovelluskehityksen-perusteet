@@ -9,6 +9,7 @@ const {
 } = require("../models/catModel");
 const { httpError } = require("../utils/errors");
 const { validationResult } = require("express-validator");
+const sharp = require("sharp");
 
 const cat_list_get = async (req, res, next) => {
   try {
@@ -52,6 +53,12 @@ const cat_post = async (req, res, next) => {
     }
 
     console.log("cat_post", req.body, req.file);
+
+    const thumbnail = await sharp(req.file.path)
+      .resize(160, 160)
+      .png()
+      .toFile("./thumbnails/" + req.file.filename);
+
     const data = [
       req.body.name,
       req.body.birthdate,
@@ -106,7 +113,7 @@ const cat_put = async (req, res, next) => {
         req.body.id,
         req.user.user_id,
       ];
-    };
+    }
 
     const result = await updateCat(data, req.user, next);
     if (result.affectedRows < 1) {
