@@ -1,6 +1,6 @@
 'use strict';
 // userController
-const {getUser, getAllUsers, addUser, deleteUser, updateUser} = require('../models/userModel');
+const {getUser, getAllUsers, deleteUser, updateUser} = require('../models/userModel');
 const {validationResult} = require('express-validator');
 const {httpError} = require('../utils/errors');
 
@@ -80,7 +80,7 @@ const check_token = (req, res, next) => {
   } else {
     res.json({ user: req.user });
   }
- }; 
+};
 
 module.exports = {
   user_list_get,
